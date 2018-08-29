@@ -15,6 +15,7 @@ public class DataBaseConfig
 	
     @Autowired
     private Environment env;
+    
 		
 	@Profile("practice")
 	@Bean(name="practice")
