@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kityhawk.lvds.dao.CustomerDao">
+	<select id="getCustByCtf" 	resultType="customer">
+		select * from customer where cust_ctf = #{cust_ctf}
+	</select>
+	
+	<select id="getCustListByOrgId" 	resultType="customer">
+		select * from customer where org_id = #{org_id}
+	</select>
+	
+	<select id="getCustByPhone" 	resultType="customer">
+		select * from customer where cust_cphone= #{cust_cphone}
+	</select>
+	
+	<!-- 检查身份证与电话号码的插入 -->
+	<insert id="addCustomerByPhoneCtf" parameterType="customer">
+	 	insert 
+	 	when (not exists (select 1 from CUSTOMER where CUST_CPHONE = #{cust_cphone,jdbcType=VARCHAR} or CUST_CTF = #{cust_ctf,jdbcType=VARCHAR})) 
+	 	then	 into CUSTOMER (CUST_ID, GRID_ID, ORG_ID,CUST_CPHONE,CUST_CPHONE2, CUST_CTF, CUST_NAME,CUST_GENDER, CUST_PROP, OTHER_PROP,
+      			CUST_ADDR, BT_POST, HAS_CARD,IS_VIP, BIRTHDAY, FM_COND,ANNUAL, MAIN_BANK, DELETED,TYPE_WAY,OFFICE_ID,THEBIRTHDAY,THEBIRTHYEAR)
+    	select 	#{cust_id,jdbcType=VARCHAR}, #{grid_id,jdbcType=VARCHAR}, #{org_id,jdbcType=VARCHAR}, #{cust_cphone,jdbcType=VARCHAR},
+    				#{cust_cphone2,jdbcType=VARCHAR}, #{cust_ctf,jdbcType=VARCHAR}, #{cust_name,jdbcType=VARCHAR}, #{cust_gender,jdbcType=NUMERIC}, 
+    				#{cust_prop,jdbcType=NUMERIC}, #{other_prop,jdbcType=VARCHAR}, #{cust_addr,jdbcType=VARCHAR}, #{bt_post,jdbcType=NUMERIC}, 
+    				#{has_card,jdbcType=NUMERIC}, #{is_vip,jdbcType=NUMERIC}, #{birthday,jdbcType=DATE}, #{fm_cond,jdbcType=NUMERIC}, #{annual,jdbcType=NUMERIC}, 
+    				#{main_bank,jdbcType=NUMERIC}, #{deleted,jdbcType=NUMERIC}, #{type_way,jdbcType=NUMERIC},#{office_id,jdbcType=VARCHAR},
+    				#{thebirthday,jdbcType=VARCHAR},#{thebirthyear,jdbcType=VARCHAR}
+      	from dual
+	</insert>
+	
+	<!-- 检查电话号码的插入-->
+	<insert id="addCustomerByPhone" parameterType="customer">
+	 	insert 
+	 	when (not exists (select 1 from CUSTOMER where CUST_CPHONE = #{cust_cphone,jdbcType=VARCHAR}))
+	 	then	 into CUSTOMER (CUST_ID, GRID_ID, ORG_ID,CUST_CPHONE,CUST_CPHONE2, CUST_CTF, CUST_NAME,CUST_GENDER, CUST_PROP, OTHER_PROP,
+      	CUST_ADDR, BT_POST, HAS_CARD,IS_VIP, BIRTHDAY, FM_COND,ANNUAL, MAIN_BANK, DELETED,TYPE_WAY,OFFICE_ID,THEBIRTHDAY,THEBIRTHYEAR)
+    	select 	#{cust_id,jdbcType=VARCHAR}, #{grid_id,jdbcType=VARCHAR}, #{org_id,jdbcType=VARCHAR}, #{cust_cphone,jdbcType=VARCHAR},
+    				#{cust_cphone2,jdbcType=VARCHAR}, #{cust_ctf,jdbcType=VARCHAR}, #{cust_name,jdbcType=VARCHAR}, #{cust_gender,jdbcType=NUMERIC}, 
+    				#{cust_prop,jdbcType=NUMERIC}, #{other_prop,jdbcType=VARCHAR}, #{cust_addr,jdbcType=VARCHAR}, #{bt_post,jdbcType=NUMERIC}, 
+    				#{has_card,jdbcType=NUMERIC}, #{is_vip,jdbcType=NUMERIC}, #{birthday,jdbcType=DATE}, #{fm_cond,jdbcType=NUMERIC}, #{annual,jdbcType=NUMERIC}, 
+    				#{main_bank,jdbcType=NUMERIC}, #{deleted,jdbcType=NUMERIC}, #{type_way,jdbcType=NUMERIC},#{office_id,jdbcType=VARCHAR},
+    				#{thebirthday,jdbcType=VARCHAR},#{thebirthyear,jdbcType=VARCHAR}
+      	from dual
+	</insert>
+	
+	<!-- 检查身份证的插入 -->
+	<insert id="addCustomerByCtf" parameterType="customer">
+	 	insert 
+	 	when (not exists (select 1 from CUSTOMER where CUST_CTF = #{cust_ctf,jdbcType=VARCHAR})) 
+	 	then	 into CUSTOMER (CUST_ID, GRID_ID, ORG_ID,CUST_CPHONE,CUST_CPHONE2, CUST_CTF, CUST_NAME,CUST_GENDER, CUST_PROP, OTHER_PROP,
+      	CUST_ADDR, BT_POST, HAS_CARD,IS_VIP, BIRTHDAY, FM_COND,ANNUAL, MAIN_BANK, DELETED,TYPE_WAY,OFFICE_ID,THEBIRTHDAY,THEBIRTHYEAR)
+    	select 	#{cust_id,jdbcType=VARCHAR}, #{grid_id,jdbcType=VARCHAR}, #{org_id,jdbcType=VARCHAR}, #{cust_cphone,jdbcType=VARCHAR},
+    				#{cust_cphone2,jdbcType=VARCHAR}, #{cust_ctf,jdbcType=VARCHAR}, #{cust_name,jdbcType=VARCHAR}, #{cust_gender,jdbcType=NUMERIC}, 
+    				#{cust_prop,jdbcType=NUMERIC}, #{other_prop,jdbcType=VARCHAR}, #{cust_addr,jdbcType=VARCHAR}, #{bt_post,jdbcType=NUMERIC}, 
+    				#{has_card,jdbcType=NUMERIC}, #{is_vip,jdbcType=NUMERIC}, #{birthday,jdbcType=DATE}, #{fm_cond,jdbcType=NUMERIC}, #{annual,jdbcType=NUMERIC}, 
+    				#{main_bank,jdbcType=NUMERIC}, #{deleted,jdbcType=NUMERIC}, #{type_way,jdbcType=NUMERIC},#{office_id,jdbcType=VARCHAR},
+    				#{thebirthday,jdbcType=VARCHAR},#{thebirthyear,jdbcType=VARCHAR}
+      	from dual
+	</insert>
+	
+	<!-- 向标签中插入客户数据 -->
+	<insert id="addCustomerToLabel" >
+	 	insert 
+	 	when (not exists (select 1 from ${labelTableName} where CUST_ID = #{cust_id})) 
+	 	then	 into ${labelTableName} (CUST_ID)
+    	select 	#{cust_id} from dual
+	</insert>
+</mapper>
