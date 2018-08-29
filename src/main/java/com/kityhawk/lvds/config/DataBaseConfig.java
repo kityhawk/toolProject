@@ -16,7 +16,7 @@ public class DataBaseConfig
     @Autowired
     private Environment env;
     
-		
+	//加个注释	
 	@Profile("practice")
 	@Bean(name="practice")
 	public BasicDataSource OraclePXdataSource()
